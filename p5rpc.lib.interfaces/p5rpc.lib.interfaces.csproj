@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<!-- Create NuGet Package and include your Documentation/comments inside. -->
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+
+		<!-- Set to the same as your project name/namespace -->
+		<PackageId>p5rpc.lib.interfaces</PackageId>
+
+		<!-- Use Semantic Versioning -->
+		<Version>1.0.0</Version>
+		<Authors>AnimatedSwine37</Authors>
+
+		<!-- Description of your Package -->
+		<Description>Interfaces for p5rpc.lib which makes it easy to use some native functions of P5R (Steam) such as flowscript functions.</Description>
+
+		<!-- Link to your Source Code [GitHub Page, etc.] -->
+		<PackageProjectUrl>https://github.com/AnimatedSwine37/p5rpc.inputhook</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/AnimatedSwine37/p5rpc.inputhook</RepositoryUrl>
+
+		<!-- URL to the icon seen for your package in NuGet Search -->
+		<PackageIconUrl>https://avatars1.githubusercontent.com/u/45473408</PackageIconUrl>
+
+		<!-- SPDX License Identifier: https://spdx.org/licenses/ -->
+		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<Title>P5RPC.Lib.Interfaces</Title>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+</Project>

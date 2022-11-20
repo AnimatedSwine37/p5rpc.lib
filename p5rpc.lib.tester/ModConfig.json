@@ -1,0 +1,21 @@
+{
+  "ModId": "p5rpc.lib.tester",
+  "ModName": "Persona 5 Royal Library Tester",
+  "ModAuthor": "AnimatedSwine37",
+  "ModVersion": "1.0.0",
+  "ModDescription": "A mod for testing the functionality of p5rpc.lib",
+  "ModDll": "p5rpc.lib.tester.dll",
+  "ModIcon": "Preview.png",
+  "ModR2RManagedDll32": "x86/p5rpc.lib.tester.dll",
+  "ModR2RManagedDll64": "x64/p5rpc.lib.tester.dll",
+  "ModNativeDll32": "",
+  "ModNativeDll64": "",
+  "IsLibrary": false,
+  "ReleaseMetadataFileName": "p5rpc.lib.tester.ReleaseMetadata.json",
+  "PluginData": {},
+  "IsUniversalMod": false,
+  "ModDependencies": [ "reloaded.sharedlib.hooks", "p5rpc.inputhook", "p5rpc.lib" ],
+  "OptionalDependencies": [],
+  "SupportedAppId": ["p5r.exe"],
+  "ProjectUrl": ""
+}
