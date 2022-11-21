@@ -43,7 +43,7 @@ namespace p5rpc.lib
         /// </summary>
         private readonly IModConfig _modConfig;
 
-        private FlowCaller _flowCaller;
+        private P5RLib _p5rLib;
 
         public Mod(ModContext context)
         {
@@ -71,8 +71,8 @@ namespace p5rpc.lib
                 return;
             }
 
-            _flowCaller = new FlowCaller(startupScanner, _hooks);
-            _modLoader.AddOrReplaceController<IFlowCaller>(_owner, _flowCaller);
+            _p5rLib = new P5RLib(startupScanner, _hooks);
+            _modLoader.AddOrReplaceController<IP5RLib>(_owner, _p5rLib);
         }
 
         #region Standard Overrides

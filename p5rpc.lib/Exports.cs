@@ -5,6 +5,6 @@ namespace p5rpc.lib
 {
     public class Exports : IExports
     {
-        public Type[] GetTypes() => new[] { typeof(IFlowCaller) };
+        public Type[] GetTypes() => new[] { typeof(IP5RLib) };
     }
 }

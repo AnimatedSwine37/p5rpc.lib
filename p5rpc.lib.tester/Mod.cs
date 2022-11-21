@@ -47,6 +47,8 @@ namespace p5rpc.lib.tester
 
         private IInputHook _inputHook;
 
+        private IP5RLib _p5rLib;
+
         private IFlowCaller _flowCaller;
 
         public Mod(ModContext context)
@@ -74,12 +76,14 @@ namespace p5rpc.lib.tester
                 return;
             }
 
-            var libController = _modLoader.GetController<IFlowCaller>();
-            if (libController == null || !libController.TryGetTarget(out _flowCaller))
+            var libController = _modLoader.GetController<IP5RLib>();
+            if (libController == null || !libController.TryGetTarget(out _p5rLib))
             {
                 Utils.LogError("Could not get p5r library, please make sure you have p5rpc.lib installed.");
                 return;
             }
+
+            _flowCaller = _p5rLib.FlowCaller;
 
             _inputHook.OnInput += InputHappened;
 
