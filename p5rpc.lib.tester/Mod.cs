@@ -85,14 +85,26 @@ namespace p5rpc.lib.tester
 
         }
 
-        int functionId = 0;
-
         private void InputHappened(List<Key> inputs)
         {
             if(inputs.Contains(Key.F5))
             {
-                //_flowCaller.CallFlowFunction(FlowFunctionGroupType.Common, functionId++); 
-                _flowCaller.CallFlowFunction(FlowFunctions.SAVE);
+                _flowCaller.CALL_FIELD(1, 3, 0, 0);
+            } 
+            // Testing inputs and outputs
+            if(inputs.Contains(Key.F6))
+            {
+                float x = _flowCaller.FLD_CAMERA_GET_X_POS();
+                float y = _flowCaller.FLD_CAMERA_GET_Y_POS();
+                float z = _flowCaller.FLD_CAMERA_GET_Z_POS();
+                Utils.Log($"The camera is at {x}, {y}, {z}");
+
+                Utils.Log($"sin(90) = {_flowCaller.SIN(90)}");
+                Utils.Log($"sin(0) = {_flowCaller.SIN(0)}");
+
+                Utils.Log($"The time is {_flowCaller.GET_TIME()}");
+                Utils.Log($"The day of week is {_flowCaller.GET_DAYOFWEEK()}");
+                Utils.Log($"The month is {_flowCaller.GET_MONTH()}");
             }
         }
 

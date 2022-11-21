@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "p5rpc.lib.tools": {
+      "commandName": "Project",
+      "commandLineArgs": "E:\\Programs\\AtlusScriptTools\\Libraries\\Persona5Royal"
+    }
+  }
+}
