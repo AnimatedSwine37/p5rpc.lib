@@ -9,6 +9,6 @@ namespace p5rpc.lib.interfaces
     public interface IP5RLib
     {
         public IFlowCaller FlowCaller { get; }
-        
+        public ISequencer Sequencer { get; }
     }
 }

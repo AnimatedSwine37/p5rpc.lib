@@ -8,7 +8,7 @@ using static p5rpc.lib.interfaces.FlowFunctions;
 using static p5rpc.lib.interfaces.FlowStruct;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace p5rpc.lib
+namespace p5rpc.lib.Components
 {
     internal unsafe class FlowCaller : IFlowCaller
     {
@@ -86,7 +86,7 @@ namespace p5rpc.lib
             Utils.LogDebug($"Calling flow function {name} with id {functionId} at 0x{function.Function:X} with {function.NumArguments} arguments");
 
             ((delegate* unmanaged[Stdcall]<nuint, void>)function.Function)(0);
-            
+
             *_flowContext = previousContext;
             return newContext;
         }
@@ -103,9 +103,9 @@ namespace p5rpc.lib
 
         private void SetArg(int argNum, object value)
         {
-            if(value is int)
+            if (value is int)
                 (*_flowContext)->Arguments[(*_flowContext)->NumArgs - argNum] = (int)value;
-            else if(value is float)
+            else if (value is float)
                 (*_flowContext)->Arguments[(*_flowContext)->NumArgs - argNum] = (long)(float)value;
         }
 

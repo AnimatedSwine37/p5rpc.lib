@@ -1,4 +1,5 @@
-﻿using p5rpc.lib.interfaces;
+﻿using p5rpc.lib.Components;
+using p5rpc.lib.interfaces;
 using Reloaded.Hooks.ReloadedII.Interfaces;
 using Reloaded.Memory.SigScan.ReloadedII.Interfaces;
 using System;
@@ -12,10 +13,12 @@ namespace p5rpc.lib
     internal class P5RLib : IP5RLib
     {
         public IFlowCaller FlowCaller { get; }
+        public ISequencer Sequencer { get; }
 
         internal P5RLib(IStartupScanner startupScanner, IReloadedHooks hooks)
         {
             FlowCaller = new FlowCaller(startupScanner, hooks);
+            Sequencer = new Sequencer(startupScanner);
         }
     }
 }

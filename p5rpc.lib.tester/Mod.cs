@@ -6,6 +6,7 @@ using Reloaded.Hooks.ReloadedII.Interfaces;
 using Reloaded.Mod.Interfaces;
 using static p5rpc.inputhook.interfaces.Inputs;
 using static p5rpc.lib.interfaces.FlowStruct;
+using static p5rpc.lib.interfaces.Sequence;
 
 namespace p5rpc.lib.tester
 {
@@ -87,6 +88,16 @@ namespace p5rpc.lib.tester
 
             _inputHook.OnInput += InputHappened;
 
+            _p5rLib.Sequencer.SequenceChanged += SequenceChanged;
+
+        }
+
+        private unsafe void SequenceChanged(SequenceInfo sequence)
+        {
+            if(sequence.EventInfo.InEvent())
+            {
+                Utils.Log($"You are now in event {sequence.EventInfo}"); 
+            }
         }
 
         private void InputHappened(List<Key> inputs)
