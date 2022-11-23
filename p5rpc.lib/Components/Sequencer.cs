@@ -55,7 +55,10 @@ namespace p5rpc.lib.Components
             SequenceChanged?.Invoke(currentSequence);
         }
 
-        public SequenceInfo SequenceInfo => *(nuint*)_sequenceStruct == 0 ? new SequenceInfo() : InternalSequenceToPublic(*(*_sequenceStruct)->SequenceInfo);
+        public SequenceInfo GetSequenceInfo()
+        {
+            return *(nuint*)_sequenceStruct == 0 ? new SequenceInfo() : InternalSequenceToPublic(*(*_sequenceStruct)->SequenceInfo);
+        }
 
         public event SequenceChangedEvent SequenceChanged;
     }

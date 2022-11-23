@@ -13,6 +13,11 @@ namespace p5rpc.lib.interfaces
         /// This event occurs whenever the current sequence changes in any way
         /// </summary>
         public event SequenceChangedEvent SequenceChanged;
+
+        /// <summary>
+        /// Gets information about the current sequence
+        /// </summary>
+        public SequenceInfo GetSequenceInfo();
     }
 
     /// <summary>
