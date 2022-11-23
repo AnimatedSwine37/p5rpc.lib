@@ -40,6 +40,11 @@ namespace p5rpc.lib.Components
             });
         }
 
+        public bool Ready()
+        {
+            return _flowFunctions != null;
+        }
+
         public float CallFloatFlowFunction(FlowFunction function, params object[] arguments)
         {
             return CallFloatFlowFunction((FlowFunctionGroupType)((int)function >> 0xc & 0xf), (int)function & 0xfff, arguments);
@@ -65,6 +70,11 @@ namespace p5rpc.lib.Components
 
         private FlowContext InternalCallFlowFunction(FlowFunctionGroupType group, int functionId, params object[] arguments)
         {
+            if (!Ready())
+            {
+                Utils.LogError($"Flow caller is not ready yet. The mod that called it should check Ready() before calling it.");
+                return new FlowContext();
+            }
             if (functionId > _flowFunctions[(int)group].NumFunctions)
             {
                 Utils.LogError($"Function id {functionId} is out of range for group {group}");
