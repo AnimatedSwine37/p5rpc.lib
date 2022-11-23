@@ -20,7 +20,6 @@ namespace p5rpc.lib.Components
 
         internal Sequencer(IStartupScanner startupScanner)
         {
-            Debugger.Launch();
             startupScanner.AddMainModuleScan("48 89 1D ?? ?? ?? ?? EB ?? 48 8B 1D ?? ?? ?? ?? 48 8B 7B ??", result =>
             {
                 if (!result.Found)
@@ -57,7 +56,7 @@ namespace p5rpc.lib.Components
 
         public SequenceInfo GetSequenceInfo()
         {
-            return *(nuint*)_sequenceStruct == 0 ? new SequenceInfo() : InternalSequenceToPublic(*(*_sequenceStruct)->SequenceInfo);
+            return _sequenceStruct == null ? new SequenceInfo() : InternalSequenceToPublic(*(*_sequenceStruct)->SequenceInfo);
         }
 
         public event SequenceChangedEvent SequenceChanged;
