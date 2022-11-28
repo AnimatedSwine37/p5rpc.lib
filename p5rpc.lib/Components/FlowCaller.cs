@@ -90,33 +90,30 @@ namespace p5rpc.lib.Components
 
             FlowContext* previousContext = *_flowContext;
             FlowContext newContext = new FlowContext();
-            *_flowContext = &newContext;
-            SetArgs(arguments);
+            SetArgs(newContext, arguments);
 
             Utils.LogDebug($"Calling flow function {name} with id {functionId} at 0x{function.Function:X} with {function.NumArguments} arguments");
 
+            *_flowContext = &newContext;
             ((delegate* unmanaged[Stdcall]<nuint, void>)function.Function)(0);
 
             *_flowContext = previousContext;
             return newContext;
         }
 
-        private void SetArgs(params object[] arguments)
+        private void SetArgs(FlowContext context, params object[] arguments)
         {
-            if ((nuint)_flowContext == 0)
-                return;
-
-            (*_flowContext)->NumArgs = (short)arguments.Length;
+            context.NumArgs = (short)arguments.Length;
             for (int i = 0; i < arguments.Length; i++)
-                SetArg(i, arguments[i]);
+                SetArg(context, i, arguments[i]);
         }
 
-        private void SetArg(int argNum, object value)
+        private void SetArg(FlowContext context, int argNum, object value)
         {
             if (value is int)
-                (*_flowContext)->Arguments[(*_flowContext)->NumArgs - argNum] = (int)value;
+                context.Arguments[context.NumArgs - argNum] = (int)value;
             else if (value is float)
-                (*_flowContext)->Arguments[(*_flowContext)->NumArgs - argNum] = (long)(float)value;
+                context.Arguments[context.NumArgs - argNum] = (long)(float)value;
         }
 
         // Flow functions!
