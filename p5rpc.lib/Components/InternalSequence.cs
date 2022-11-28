@@ -55,11 +55,6 @@ namespace p5rpc.lib.Components
 
         internal unsafe static SequenceInfo InternalSequenceToPublic(SequenceInfoStruct internalInfo)
         {
-            if(internalInfo.EventInfo != null && (internalInfo.CurrentSequence == SequenceType.EVENT || internalInfo.CurrentSequence == SequenceType.EVENT_VIEWER))
-            {
-                Utils.LogDebug($"Event is at 0x{(nuint)internalInfo.EventInfo:X}");
-                Utils.LogDebug($"Event details: {*internalInfo.EventInfo}");
-            }
             return new SequenceInfo(internalInfo.CurrentSequence, internalInfo.LastSequence,
                 internalInfo.EventInfo != null && (internalInfo.CurrentSequence == SequenceType.EVENT || internalInfo.CurrentSequence == SequenceType.EVENT_VIEWER) 
                 ? new EventInfo((*internalInfo.EventInfo).Major, (*internalInfo.EventInfo).Minor) : null);
