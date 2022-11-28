@@ -89,15 +89,17 @@ namespace p5rpc.lib.tester
             _inputHook.OnInput += InputHappened;
 
             _p5rLib.Sequencer.SequenceChanged += SequenceChanged;
+            _p5rLib.Sequencer.EventStarted += EventStarted;
+        }
 
+        private void EventStarted(EventInfo eventInfo)
+        {
+            Utils.Log($"You are now in event {eventInfo}");
         }
 
         private unsafe void SequenceChanged(SequenceInfo sequence)
         {
-            if(sequence.EventInfo.InEvent())
-            {
-                Utils.Log($"You are now in event {sequence.EventInfo}"); 
-            }
+            Utils.Log($"The sequence changed to {sequence}");
         }
 
         private void InputHappened(List<Key> inputs)

@@ -17,16 +17,13 @@ namespace p5rpc.lib.interfaces
         {
             public SequenceType CurrentSequence { get; }
             public SequenceType LastSequence { get; }
-            public EventInfo EventInfo { get; }
+            public EventInfo? EventInfo { get; }
             
-            public SequenceInfo(SequenceType currentSequence, SequenceType lastSequence, EventInfo eventInfo)
+            public SequenceInfo(SequenceType currentSequence, SequenceType lastSequence, EventInfo? eventInfo)
             {
                 CurrentSequence = currentSequence;
                 LastSequence = lastSequence;
-                if (CurrentSequence == SequenceType.EVENT || CurrentSequence == SequenceType.EVENT_VIEWER)
-                    EventInfo = eventInfo;
-                else
-                    EventInfo = new EventInfo();
+                EventInfo = eventInfo;
             }
 
             /// <summary>
@@ -36,7 +33,6 @@ namespace p5rpc.lib.interfaces
             {
                 CurrentSequence = SequenceType.NONE;
                 LastSequence = SequenceType.NONE;
-                EventInfo = new EventInfo();
             }
 
             public override bool Equals(object? obj)
@@ -44,12 +40,16 @@ namespace p5rpc.lib.interfaces
                 if (obj is not SequenceInfo)
                     return false;
                 SequenceInfo other = (SequenceInfo)obj;
-                return other.LastSequence == LastSequence && other.CurrentSequence == CurrentSequence && other.EventInfo.Equals(EventInfo);
+                if (other.LastSequence != LastSequence || other.CurrentSequence != CurrentSequence)
+                    return false;
+                if (other.EventInfo == null)
+                    return other.EventInfo == EventInfo;
+                return other.EventInfo.Equals(EventInfo);
             }
 
             public override string ToString()
             {
-                return $"Current {CurrentSequence}, Last {LastSequence}{(EventInfo.InEvent() ? $", {EventInfo}" : "")}";
+                return $"Current {CurrentSequence}, Last {LastSequence}";
             }
         }
 
@@ -57,11 +57,16 @@ namespace p5rpc.lib.interfaces
         /// <summary>
         /// Contains information about the current event
         /// </summary>
-        [StructLayout(LayoutKind.Sequential)]
-        public struct EventInfo
+        public class EventInfo
         {
             public int Major { get; }
             public int Minor { get; }
+
+            public EventInfo(int major, int minor)
+            {
+                Major = major;
+                Minor = minor;
+            }
 
             public override string ToString()
             {
@@ -74,15 +79,6 @@ namespace p5rpc.lib.interfaces
                     return false;
                 EventInfo other = (EventInfo)obj;
                 return other.Major == Major && other.Minor == Minor;
-            }
-
-            /// <summary>
-            /// Checks whether the event info is for an actual event (an event with Major 0, Minor 0 means we're not actually in an event)
-            /// </summary>
-            /// <returns>Whether the player is in an event based on this EventInfo</returns>
-            public bool InEvent()
-            {
-                return Major != 0 || Minor != 0;
             }
         }
 

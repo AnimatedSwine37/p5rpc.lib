@@ -52,13 +52,23 @@ namespace p5rpc.lib.Components
             Utils.LogDebug($"Current sequence: {currentSequence}");
             _lastSequence = currentSequence;
             SequenceChanged?.Invoke(currentSequence);
+            if (currentSequence.EventInfo != null)
+                EventStarted?.Invoke(currentSequence.EventInfo);
         }
 
         public SequenceInfo GetSequenceInfo()
         {
-            return _sequenceStruct == null ? new SequenceInfo() : InternalSequenceToPublic(*(*_sequenceStruct)->SequenceInfo);
+            if (_sequenceStruct == null || *_sequenceStruct == null)
+                return new SequenceInfo();
+            else
+            {
+                var result = InternalSequenceToPublic(*(*_sequenceStruct)->SequenceInfo);
+                Utils.LogDebug(result.ToString());
+                return result;
+            }
         }
 
         public event SequenceChangedEvent SequenceChanged;
+        public event EventStartedEvent EventStarted;
     }
 }

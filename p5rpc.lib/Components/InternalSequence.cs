@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -17,14 +18,21 @@ namespace p5rpc.lib.Components
         internal unsafe struct SequenceStruct
         {
             [FieldOffset(72)]
-            internal InternalSequenceInfo* SequenceInfo;
+            internal SequenceInfoStruct* SequenceInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal unsafe struct EventInfoStruct
+        {
+            internal int Major;
+            internal int Minor;
         }
 
         /// <summary>
-        /// Information about the current sequence
+        /// Information about the current sequence as it's found in memory (beware pointers!)
         /// </summary>
         [StructLayout(LayoutKind.Explicit)]
-        internal unsafe struct InternalSequenceInfo
+        internal unsafe struct SequenceInfoStruct
         {
             [FieldOffset(0)]
             internal int Field0;
@@ -42,12 +50,19 @@ namespace p5rpc.lib.Components
             /// Information about the current event (if there is one). Always check that this isn't null before using it!
             /// </summary>
             [FieldOffset(24)]
-            internal EventInfo* EventInfo;
+            internal EventInfoStruct* EventInfo;
         }
 
-        internal static unsafe SequenceInfo InternalSequenceToPublic(InternalSequenceInfo internalInfo)
+        internal unsafe static SequenceInfo InternalSequenceToPublic(SequenceInfoStruct internalInfo)
         {
-            return new SequenceInfo(internalInfo.CurrentSequence, internalInfo.LastSequence, internalInfo.EventInfo == null ? new EventInfo() : *internalInfo.EventInfo);
+            if(internalInfo.EventInfo != null && (internalInfo.CurrentSequence == SequenceType.EVENT || internalInfo.CurrentSequence == SequenceType.EVENT_VIEWER))
+            {
+                Utils.LogDebug($"Event is at 0x{(nuint)internalInfo.EventInfo:X}");
+                Utils.LogDebug($"Event details: {*internalInfo.EventInfo}");
+            }
+            return new SequenceInfo(internalInfo.CurrentSequence, internalInfo.LastSequence,
+                internalInfo.EventInfo != null && (internalInfo.CurrentSequence == SequenceType.EVENT || internalInfo.CurrentSequence == SequenceType.EVENT_VIEWER) 
+                ? new EventInfo((*internalInfo.EventInfo).Major, (*internalInfo.EventInfo).Minor) : null);
         }
 
     }
