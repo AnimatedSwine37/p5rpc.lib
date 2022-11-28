@@ -90,7 +90,7 @@ namespace p5rpc.lib.Components
 
             FlowContext* previousContext = *_flowContext;
             FlowContext newContext = new FlowContext();
-            SetArgs(newContext, arguments);
+            SetArgs(ref newContext, arguments);
 
             Utils.LogDebug($"Calling flow function {name} with id {functionId} at 0x{function.Function:X} with {function.NumArguments} arguments");
 
@@ -101,14 +101,14 @@ namespace p5rpc.lib.Components
             return newContext;
         }
 
-        private void SetArgs(FlowContext context, params object[] arguments)
+        private void SetArgs(ref FlowContext context, params object[] arguments)
         {
             context.NumArgs = (short)arguments.Length;
             for (int i = 0; i < arguments.Length; i++)
-                SetArg(context, i, arguments[i]);
+                SetArg(ref context, i, arguments[i]);
         }
 
-        private void SetArg(FlowContext context, int argNum, object value)
+        private void SetArg(ref FlowContext context, int argNum, object value)
         {
             if (value is int)
                 context.Arguments[context.NumArgs - argNum] = (int)value;
