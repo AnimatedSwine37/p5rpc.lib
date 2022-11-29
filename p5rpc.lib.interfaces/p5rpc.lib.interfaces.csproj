@@ -20,11 +20,14 @@
 		<Description>Interfaces for p5rpc.lib which makes it easy to use some native functions of P5R (Steam) such as flowscript functions.</Description>
 
 		<!-- Link to your Source Code [GitHub Page, etc.] -->
-		<PackageProjectUrl>https://github.com/AnimatedSwine37/p5rpc.inputhook</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/AnimatedSwine37/p5rpc.inputhook</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/AnimatedSwine37/p5rpc.lib</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/AnimatedSwine37/p5rpc.lib</RepositoryUrl>
 
-		<!-- URL to the icon seen for your package in NuGet Search -->
-		<PackageIconUrl>https://avatars1.githubusercontent.com/u/45473408</PackageIconUrl>
+		<!-- Readme file-->
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+
+		<!-- Tje icon seen for your package in NuGet Search -->
+		<PackageIcon>Preview.png</PackageIcon>
 
 		<!-- SPDX License Identifier: https://spdx.org/licenses/ -->
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
@@ -32,5 +35,10 @@
 		<Title>P5RPC.Lib.Interfaces</Title>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\"/>
+		<None Include="..\p5rpc.lib\Preview.png" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 
 </Project>
