@@ -4,8 +4,8 @@ using Reloaded.Memory.SigScan.ReloadedII.Interfaces;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using static p5rpc.lib.Components.FlowStruct;
 using static p5rpc.lib.interfaces.FlowFunctions;
-using static p5rpc.lib.interfaces.FlowStruct;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace p5rpc.lib.Components

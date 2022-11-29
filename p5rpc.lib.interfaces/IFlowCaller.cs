@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static p5rpc.lib.interfaces.FlowFunctions;
-using static p5rpc.lib.interfaces.FlowStruct;
 
 namespace p5rpc.lib.interfaces
 {
+    /// <summary>
+    /// An interface for calling flowscript functions
+    /// </summary>
     public interface IFlowCaller
     {
         /// <summary>
@@ -53,6 +55,7 @@ namespace p5rpc.lib.interfaces
 
 
         // All of the flow functions!
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public int AI_RND(int param1);
         public void AI_ACT_ATTACK();
         public int AI_TAR_RND();
@@ -2216,6 +2219,7 @@ namespace p5rpc.lib.interfaces
         public void CMM_SYNC_POINT_ID_ST();
         public void EVT_BACKLOG_STOP(int param1);
         public void EVT_MOUSE_INPUT_ENABLE();
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
     }
 }

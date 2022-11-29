@@ -8,6 +8,23 @@ namespace p5rpc.lib.interfaces
 {
     public class FlowFunctions
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+        /// <summary>
+        /// Groups of flow functions
+        /// </summary>
+        public enum FlowFunctionGroupType
+        {
+            Common,
+            Field,
+            AI,
+            Social,
+            Facility,
+            Net
+        }
+
+        /// <summary>
+        /// The name of every flow function mapped to their id
+        /// </summary>
         public enum FlowFunction
         {
             SYNC = 0,
@@ -2174,7 +2191,6 @@ namespace p5rpc.lib.interfaces
             NET_START_AUDIENCE = 20486,
             NET_STOP_AUDIENCE = 20487,
         }
-
-        
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }
