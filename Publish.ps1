@@ -162,14 +162,14 @@ param (
     $UseScriptDirectory=$True,
 
     ## => User Config <= ## 
-    $ProjectPath = "p5rpc.lib.csproj",
+    $ProjectPath = "p5rpc.lib/p5rpc.lib.csproj",
     $PackageName = "p5rpc.lib",
     $PublishOutputDir = "Publish/ToUpload",
 
     ## => User: Delta Config
     # Pick one and configure settings below.
     $MetadataFileName = "Sewer56.Update.ReleaseMetadata.json",
-    $UseGitHubDelta = $False, # GitHub Releases
+    $UseGitHubDelta = $True, # GitHub Releases
     $UseGameBananaDelta = $False,
     $UseNuGetDelta = $False,
 
