@@ -5,7 +5,6 @@ using p5rpc.lib.tester.Template;
 using Reloaded.Hooks.ReloadedII.Interfaces;
 using Reloaded.Mod.Interfaces;
 using static p5rpc.inputhook.interfaces.Inputs;
-using static p5rpc.lib.interfaces.FlowStruct;
 using static p5rpc.lib.interfaces.Sequence;
 
 namespace p5rpc.lib.tester
@@ -104,6 +103,10 @@ namespace p5rpc.lib.tester
 
         private void InputHappened(List<Key> inputs)
         {
+            if(inputs.Contains(Key.N))
+            {
+                _flowCaller.FLD_GET_MAJOR();
+            }
             if(inputs.Contains(Key.F5))
             {
                 _flowCaller.CALL_FIELD(1, 3, 0, 0);

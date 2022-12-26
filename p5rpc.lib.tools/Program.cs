@@ -3,28 +3,46 @@ using System.Text.Json;
 
 if (args.Length == 0)
 {
-    Console.WriteLine("Usage: p5rpc.lib.tools <path to script compiler libraries folder>");
+    Console.WriteLine("Usage: p5rpc.lib.tools <function>");
+    Console.WriteLine("Valid functions: functionParse, skillsParse, itemsParse, personasParse");
     return;
 }
 
-var files = Directory.GetFiles(args[0], "Functions.json", SearchOption.AllDirectories);
-using (var writer = new StreamWriter("functions.txt"))
+switch (args[0])
 {
-    using (var interfaceWriter = new StreamWriter("interfaces.txt"))
-    {
-        foreach (var file in files)
+    case "functionParse":
+        if (args.Length < 2)
         {
-            string json = File.ReadAllText(file);
-            FlowFunction[] functions = JsonSerializer.Deserialize<FlowFunction[]>(json);
-            foreach (var function in functions)
-            {
-                string paramaters = function.Parameters == null ? "" : string.Join(", ", function.Parameters.Select(p => p.ToString()));
-                interfaceWriter.WriteLine($"public {function.ReturnType} {function.Name}({paramaters});");
-
-                string paramNames = function.Parameters == null ? "" : string.Join(", ", function.Parameters.Select(p => p.Name));
-                writer.WriteLine($"public {function.ReturnType} {function.Name}({paramaters}) " +
-                    $"{{ {(function.ReturnType != "void" ? "return " : "")}Call{(function.ReturnType == "float" ? "Float" : "")}FlowFunction(FlowFunction.{function.Name}{(paramaters == "" ? "" : ", ")}{paramNames}); }}");
-            }
+            Console.WriteLine("Usage: p5rpc.lib.tools functionParse <path to script compiler libraries folder>");
+            return;
         }
-    }
+
+        new FunctionParser().ParseFunctions(args[1]);
+        break;
+    case "skillsParse":
+        if (args.Length < 2)
+        {
+            Console.WriteLine("Usage: p5rpc.lib.tools skillsParse <path to tab seperated skills table file>");
+        }
+        new SkillsParser().ParseSkills(args[1]);
+        break;
+    case "personasParse":
+        if (args.Length < 2)
+        {
+            Console.WriteLine("Usage: p5rpc.lib.tools personasParse <path to tab seperated persona table file>");
+        }
+        new PersonaParser().ParsePersonas(args[1]);
+        break;
+    case "itemsParse":
+        if (args.Length < 3)
+        {
+            Console.WriteLine("Usage: p5rpc.lib.tools skillsParse <path to tab seperated items table file> <items start index>");
+            return;
+        }
+        new ItemParser().ParseItems(args[1], int.Parse(args[2]));
+        break;
+    default:
+        Console.WriteLine("Invalid function");
+        Console.WriteLine("Valid functions: functionParse, skillsParse, itemsParse, personasParse");
+        break;
 }
