@@ -54,3 +54,6 @@ The only reliable way to get the current event is by subscribing to the `EventSt
 
 Also, the `SequenceType`s are not neccessarily accurate. In particular `BATTLE` seems to be used almost everywhere, not just in battle, and `FIELD` and `FILED_VIEWR` are never used as far as I've seen. The event, calendar and title screen ones do seem to be accurate.
 Later on I'll probably try and find a way to accurately track those that are always showing as BATTLE.
+
+## Special Thanks
+- [Persona5ScriptHook](https://github.com/Zolika1351/Persona5ScriptHook/) which some of the flowscript calling code is based off of (mostly the flow context struct)

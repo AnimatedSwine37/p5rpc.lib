@@ -5997,7 +5997,6 @@ namespace p5rpc.lib.interfaces
         public enum Enemy
         {
             Not_Used,
-            Not_Used,
             Shadow_of_God,
             Fly_of_the_Dead,
             Spear_Wielding_General,
