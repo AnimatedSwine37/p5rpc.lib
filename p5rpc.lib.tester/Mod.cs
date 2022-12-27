@@ -103,16 +103,25 @@ namespace p5rpc.lib.tester
 
         private void InputHappened(List<Key> inputs)
         {
-            if(inputs.Contains(Key.N))
+            if (inputs.Contains(Key.F1))
             {
-                _flowCaller.FLD_GET_MAJOR();
+                Utils.Log("Adding skill...");
+                _flowCaller.SKILL_ADD(1, 477);
+                _flowCaller.FADEIN(0, 10);
+                Utils.Log("Added skill!");
             }
-            if(inputs.Contains(Key.F5))
+            if (inputs.Contains(Key.N))
+            {
+                int major = _flowCaller.FLD_GET_MAJOR();
+                int minor = _flowCaller.FLD_GET_MINOR();
+                Utils.Log($"Current filed: {major}_{minor}");
+            }
+            if (inputs.Contains(Key.F5))
             {
                 _flowCaller.CALL_FIELD(1, 3, 0, 0);
-            } 
+            }
             // Testing inputs and outputs
-            if(inputs.Contains(Key.F6))
+            if (inputs.Contains(Key.F6))
             {
                 float x = _flowCaller.FLD_CAMERA_GET_X_POS();
                 float y = _flowCaller.FLD_CAMERA_GET_Y_POS();

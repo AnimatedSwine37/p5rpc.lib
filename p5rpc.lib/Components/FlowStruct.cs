@@ -40,5 +40,18 @@ namespace p5rpc.lib.Components
             [FieldOffset(0x224)]
             internal int WaitingFlag;
         }
+
+        internal class FlowCallInfo
+        {
+            internal FlowFunctionInfo FunctionInfo { get; }
+            internal FlowContext* Context { get; }
+            internal volatile bool CallFinished;
+            internal FlowCallInfo(FlowFunctionInfo functionInfo, FlowContext* context)
+            {
+                FunctionInfo = functionInfo;
+                Context = context;
+                CallFinished = false;
+            }
+        }
     }
 }

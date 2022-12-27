@@ -1,5 +1,6 @@
 ﻿using p5rpc.lib.interfaces;
 using Reloaded.Hooks.Definitions;
+using Reloaded.Hooks.Definitions.X64;
 using Reloaded.Memory.SigScan.ReloadedII.Interfaces;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -14,6 +15,9 @@ namespace p5rpc.lib.Components
     {
         private FlowContext** _flowContext;
         private FlowFunctionGroup* _flowFunctions;
+
+        private IHook<MainLoopDelegate> _mainLoopHook;
+        private Queue<FlowCallInfo> _callQueue = new();
 
         internal FlowCaller(IStartupScanner startupScanner, IReloadedHooks hooks)
         {
@@ -38,7 +42,43 @@ namespace p5rpc.lib.Components
                 Utils.LogDebug($"Found call flow function at 0x{result.Offset + Utils.BaseAddress:X}");
                 _flowFunctions = (FlowFunctionGroup*)Utils.GetGlobalAddress((nuint)result.Offset + (nuint)Utils.BaseAddress + 3);
             });
+
+            startupScanner.AddMainModuleScan("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 57 41 56 41 57 48 83 EC 60 48 83 3D ?? ?? ?? ?? 00", result =>
+            {
+                if (!result.Found)
+                {
+                    Utils.LogError("Unable to main loop, won't be able to call flow functions :(");
+                    return;
+                }
+                Utils.LogDebug($"Found main loop at 0x{result.Offset + Utils.BaseAddress:X}");
+                _mainLoopHook = hooks.CreateHook<MainLoopDelegate>(MainLoop, result.Offset + Utils.BaseAddress).Activate();
+            });
         }
+
+        private void MainLoop()
+        {
+            if (_callQueue.Count > 0)
+            {
+                var callInfo = _callQueue.Peek();
+                FlowContext* previousContext = *_flowContext;
+                *_flowContext = callInfo.Context;
+                bool ret = false;
+                ret = ((delegate* unmanaged[Stdcall]<nuint, bool>)callInfo.FunctionInfo.Function)(0);
+                if (!ret)
+                {
+                    callInfo.Context->WaitingFlag = 0x7FFFFFFF;
+                } else
+                {
+                    callInfo.CallFinished = true;
+                    _callQueue.Dequeue();
+                }
+                *_flowContext = previousContext;
+            }
+            _mainLoopHook.OriginalFunction();
+        }
+
+        [Function(CallingConventions.Microsoft)]
+        private delegate void MainLoopDelegate();
 
         public bool Ready()
         {
@@ -88,16 +128,17 @@ namespace p5rpc.lib.Components
                 return new FlowContext();
             }
 
-            FlowContext* previousContext = *_flowContext;
             FlowContext newContext = new FlowContext();
             SetArgs(ref newContext, arguments);
 
-            Utils.LogDebug($"Calling flow function {name} with id {functionId} at 0x{function.Function:X} with {function.NumArguments} arguments");
+            Utils.LogDebug($"Queuing call for flow function {name} with id {functionId} at 0x{function.Function:X} with {function.NumArguments} arguments");
 
-            *_flowContext = &newContext;
-            ((delegate* unmanaged[Stdcall]<nuint, void>)function.Function)(0);
+            FlowCallInfo callInfo = new FlowCallInfo(function, &newContext);
+            _callQueue.Enqueue(callInfo);
 
-            *_flowContext = previousContext;
+            while (!callInfo.CallFinished)
+                Thread.Sleep(1);
+            
             return newContext;
         }
 
