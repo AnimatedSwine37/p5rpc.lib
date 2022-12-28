@@ -28,6 +28,7 @@ env:
   PUBLISH_GAMEBANANA_PATH: ./Publish/ToUpload/GameBanana
   PUBLISH_GITHUB_PATH: ./Publish/ToUpload/Generic
   PUBLISH_NUGET_PATH: ./Publish/ToUpload/NuGet
+  PUBLISH_INTERFACE_PATH: ./Publish/Interface
   
   PUBLISH_CHANGELOG_PATH: ./Publish/Changelog.md
   PUBLISH_PATH: ./Publish
@@ -151,4 +152,11 @@ jobs:
         {
             Write-Host "Pushing $item"
             dotnet nuget push "$item" -k "$env:NUGET_KEY" -s "$env:NUGET_URL" --skip-duplicate
+        }
+        
+        $items = Get-ChildItem -Path "$env:PUBLISH_INTERFACE_PATH/*.nupkg"
+        Foreach ($item in $items)
+        {
+            Write-Host "Pushing $item"
+            dotnet nuget push "$item" -k "$env:INTERFACE_NUGET_KEY" --skip-duplicate
         }

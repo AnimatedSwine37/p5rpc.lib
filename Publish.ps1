@@ -406,3 +406,5 @@ Write-Host "Upload the files in folder `"$PublishOutputDir`" to respective locat
 if ($UseScriptDirectory) {
     Pop-Location
 }
+
+.\PublishInterfaces.ps1
