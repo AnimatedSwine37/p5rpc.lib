@@ -13,7 +13,7 @@
 		<PackageId>p5rpc.lib.interfaces</PackageId>
 
 		<!-- Use Semantic Versioning -->
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<Authors>AnimatedSwine37</Authors>
 
 		<!-- Description of your Package -->
@@ -37,8 +37,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\README.md" Pack="true" PackagePath="\"/>
-		<None Include="..\p5rpc.lib\Preview.png" Pack="true" PackagePath="\"/>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+		<None Include="..\p5rpc.lib\Preview.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>
