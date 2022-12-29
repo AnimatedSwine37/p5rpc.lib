@@ -2,9 +2,7 @@
 using Reloaded.Hooks.Definitions;
 using Reloaded.Hooks.Definitions.X64;
 using Reloaded.Memory.SigScan.ReloadedII.Interfaces;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text;
 using static p5rpc.lib.Components.FlowStruct;
 using static p5rpc.lib.interfaces.FlowFunctions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -18,6 +16,8 @@ namespace p5rpc.lib.Components
 
         private IHook<MainLoopDelegate> _mainLoopHook;
         private Queue<FlowCallInfo> _callQueue = new();
+
+        private Thread _mainThread;
 
         internal FlowCaller(IStartupScanner startupScanner, IReloadedHooks hooks)
         {
@@ -57,6 +57,8 @@ namespace p5rpc.lib.Components
 
         private void MainLoop()
         {
+            if (_mainThread == null)
+                _mainThread = Thread.CurrentThread;
             if (_callQueue.Count > 0)
             {
                 var callInfo = _callQueue.Peek();
@@ -67,7 +69,8 @@ namespace p5rpc.lib.Components
                 if (!ret)
                 {
                     callInfo.Context->WaitingFlag = 0x7FFFFFFF;
-                } else
+                }
+                else
                 {
                     callInfo.CallFinished = true;
                     _callQueue.Dequeue();
@@ -131,14 +134,28 @@ namespace p5rpc.lib.Components
             FlowContext newContext = new FlowContext();
             SetArgs(ref newContext, arguments);
 
-            Utils.LogDebug($"Queuing call for flow function {name} with id {functionId} at 0x{function.Function:X} with {function.NumArguments} arguments");
+            if (_mainThread == null || Thread.CurrentThread != _mainThread)
+            {
+                // Calls not from the main thread are queued so they are run on it to avoid collisions with other flow functions
+                Utils.LogDebug($"Queuing call for flow function {name} with id {functionId} at 0x{function.Function:X} with {function.NumArguments} arguments");
 
-            FlowCallInfo callInfo = new FlowCallInfo(function, &newContext);
-            _callQueue.Enqueue(callInfo);
+                FlowCallInfo callInfo = new FlowCallInfo(function, &newContext);
+                _callQueue.Enqueue(callInfo);
 
-            while (!callInfo.CallFinished)
-                Thread.Sleep(1);
-            
+                while (!callInfo.CallFinished)
+                    Thread.Sleep(1);
+            }
+            else
+            {
+                // Calls from the main thread must be run immediately, if they were queued it would softlock the game
+                Utils.LogDebug($"Calling flow function {name} with id {functionId} at 0x{function.Function:X} with {function.NumArguments} arguments");
+                
+                FlowContext* previousContext = *_flowContext;
+                *_flowContext = &newContext;
+                ((delegate* unmanaged[Stdcall]<nuint, bool>)function.Function)(0);
+                *_flowContext = previousContext;
+            }
+
             return newContext;
         }
 
