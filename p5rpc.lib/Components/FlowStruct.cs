@@ -28,8 +28,8 @@ namespace p5rpc.lib.Components
         internal struct FlowContext
         {
             [FieldOffset(0x2c)]
-            internal short NumArgs;
-            [FieldOffset(0x2e)]
+            internal int NumArgs;
+            [FieldOffset(0x30)]
             internal fixed byte ArgTypes[32];
             [FieldOffset(0x58)]
             internal fixed long Arguments[32];
@@ -41,6 +41,11 @@ namespace p5rpc.lib.Components
             internal int WaitingFlag;
         }
 
+        public enum ArgType : byte
+        {
+            Integer = 0,
+            Float = 1,
+        }
         internal class FlowCallInfo
         {
             internal FlowFunctionInfo FunctionInfo { get; }

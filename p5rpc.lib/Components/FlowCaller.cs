@@ -169,9 +169,14 @@ namespace p5rpc.lib.Components
         private void SetArg(ref FlowContext context, int argNum, object value)
         {
             if (value is int)
+            {
                 context.Arguments[context.NumArgs - argNum] = (int)value;
+                context.ArgTypes[context.NumArgs - argNum - 1] = (byte)ArgType.Integer;
+            }
             else if (value is float)
-                context.Arguments[context.NumArgs - argNum] = (long)(float)value;
+            {
+                context.Arguments[context.NumArgs - argNum] = BitConverter.SingleToInt32Bits((float)value);
+                context.ArgTypes[context.NumArgs - argNum - 1] = (byte)ArgType.Float;
         }
 
         // Flow functions!
