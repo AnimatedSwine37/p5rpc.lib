@@ -177,6 +177,7 @@ namespace p5rpc.lib.Components
             {
                 context.Arguments[context.NumArgs - argNum] = BitConverter.SingleToInt32Bits((float)value);
                 context.ArgTypes[context.NumArgs - argNum - 1] = (byte)ArgType.Float;
+            }
         }
 
         // Flow functions!
