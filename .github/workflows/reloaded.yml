@@ -37,6 +37,7 @@ env:
 
   # Default value is official Reloaded package server.  
   NUGET_URL: http://packages.sewer56.moe:5000/v3/index.json
+  NUGET_INTERFACE_URL: https://api.nuget.org/v3/index.json
   
   IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/') }}
   RELEASE_TAG: ${{ github.ref_name }}
@@ -158,5 +159,5 @@ jobs:
         Foreach ($item in $items)
         {
             Write-Host "Pushing $item"
-            dotnet nuget push "$item" -k "$env:INTERFACE_NUGET_KEY" -s "https://api.nuget.org/v3/index.json" --skip-duplicate
+            dotnet nuget push "$item" -k "$env:INTERFACE_NUGET_KEY" -s "$env:NUGET_INTERFACE_URL" --skip-duplicate
         }
