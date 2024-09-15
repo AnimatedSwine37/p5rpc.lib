@@ -42,16 +42,17 @@ namespace p5rpc.lib.Components
                 Utils.LogDebug($"Found call flow function at 0x{result.Offset + Utils.BaseAddress:X}");
                 _flowFunctions = (FlowFunctionGroup*)Utils.GetGlobalAddress((nuint)result.Offset + (nuint)Utils.BaseAddress + 3);
             });
-
-            startupScanner.AddMainModuleScan("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 57 41 56 41 57 48 83 EC 60 48 83 3D ?? ?? ?? ?? 00", result =>
+            startupScanner.AddMainModuleScan("E8 ?? ?? ?? ?? FF 05 ?? ?? ?? ?? 83 0D ?? ?? ?? ?? 10", result =>
             {
                 if (!result.Found)
                 {
-                    Utils.LogError("Unable to main loop, won't be able to call flow functions :(");
+                    Utils.LogError("Unable to main loop ptr, won't be able to call flow functions :(");
                     return;
                 }
-                Utils.LogDebug($"Found main loop at 0x{result.Offset + Utils.BaseAddress:X}");
-                _mainLoopHook = hooks.CreateHook<MainLoopDelegate>(MainLoop, result.Offset + Utils.BaseAddress).Activate();
+                Utils.LogDebug($"Found main loop ptr at 0x{result.Offset + Utils.BaseAddress:X}");
+                var address = Utils.GetGlobalAddress((UIntPtr)(result.Offset + Utils.BaseAddress + 1));
+                Utils.LogDebug($"Found main loop at 0x{address:X}");
+                _mainLoopHook = hooks.CreateHook<MainLoopDelegate>(MainLoop, (long)address).Activate();
             });
         }
 

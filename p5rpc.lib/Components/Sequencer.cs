@@ -20,7 +20,7 @@ namespace p5rpc.lib.Components
 
         internal Sequencer(IStartupScanner startupScanner)
         {
-            startupScanner.AddMainModuleScan("48 89 1D ?? ?? ?? ?? EB ?? 48 8B 1D ?? ?? ?? ?? 48 8B 7B ??", result =>
+            startupScanner.AddMainModuleScan("48 8B 05 ?? ?? ?? ?? 66 44 89 4C 24 ??", result =>
             {
                 if (!result.Found)
                 {
