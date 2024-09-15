@@ -140,6 +140,7 @@ jobs:
     - name: Push to NuGet (on Tag)
       env: 
         NUGET_KEY: ${{ secrets.RELOADED_NUGET_KEY }}
+        INTERFACE_NUGET_KEY: ${{ secrets.INTERFACE_NUGET_KEY }}
       if: env.IS_RELEASE == 'true'
       run: |
         if ([string]::IsNullOrEmpty("$env:NUGET_KEY"))
