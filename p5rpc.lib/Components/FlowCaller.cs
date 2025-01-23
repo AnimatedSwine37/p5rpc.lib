@@ -17,7 +17,7 @@ namespace p5rpc.lib.Components
         private IHook<MainLoopDelegate> _mainLoopHook;
         private Queue<FlowCallInfo> _callQueue = new();
 
-        private Thread _mainThread;
+        private Thread? _mainThread;
 
         internal FlowCaller(IStartupScanner startupScanner, IReloadedHooks hooks)
         {

@@ -24,7 +24,9 @@ namespace p5rpc.lib.Components
             internal char* Name { get; }
         }
 
-        [StructLayout(LayoutKind.Explicit)]
+        // Not sure what size this struct actually is, making it pretty big to be cautious
+        // I know it is at least 0x270 bytes
+        [StructLayout(LayoutKind.Explicit, Size = 1024)]
         internal struct FlowContext
         {
             [FieldOffset(0x2c)]
