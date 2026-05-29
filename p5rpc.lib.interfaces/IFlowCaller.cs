@@ -19,7 +19,7 @@ namespace p5rpc.lib.interfaces
         /// <param name="group">The type of function it is (thye names of the folders the Functions are in in the script compiler library)</param>
         /// <param name="functionId">The id of the flow function (look at script compiler library for ids)</param>
         /// <returns>The int that the function returns or 0 if it returns nothing</returns>
-        public int CallFlowFunction(FlowFunctionGroupType group, int functionId, params object[] arguments);
+        public int CallFlowFunction(FlowFunctionGroupType group, int functionId, bool emitSharedContext, bool useSharedContext, params object[] arguments);
 
         /// <summary>
         /// Calls a flow function
@@ -27,7 +27,7 @@ namespace p5rpc.lib.interfaces
         /// </summary>
         /// <param name="function">The flow function to call</param>
         /// <returns>The int that the function returns or 0 if it returns nothing</returns>
-        public int CallFlowFunction(FlowFunction function , params object[] arguments);
+        public int CallFlowFunction(FlowFunction function, bool emitSharedContext, bool useSharedContext, params object[] arguments);
 
         /// <summary>
         /// Calls a flow function that returns a float with the given id
@@ -36,7 +36,7 @@ namespace p5rpc.lib.interfaces
         /// <param name="group">The type of function it is (thye names of the folders the Functions are in in the script compiler library)</param>
         /// <param name="functionId">The id of the flow function (look at script compiler library for ids)</param>
         /// <returns>The float that the flow function returns</returns>
-        public float CallFloatFlowFunction(FlowFunctionGroupType group, int functionId, params object[] arguments);
+        public float CallFloatFlowFunction(FlowFunctionGroupType group, int functionId, bool emitSharedContext, bool useSharedContext, params object[] arguments);
 
         /// <summary>
         /// Calls a flow function that returns a float
@@ -44,7 +44,7 @@ namespace p5rpc.lib.interfaces
         /// </summary>
         /// <param name="function">The flow function to call</param>
         /// <returns>The float that the flow function returns</returns>
-        public float CallFloatFlowFunction(FlowFunction function, params object[] arguments);
+        public float CallFloatFlowFunction(FlowFunction function, bool emitSharedContext, bool useSharedContext, params object[] arguments);
 
         /// <summary>
         /// Checks whether the flow caller is ready as the game has to be initialised for functions to be called

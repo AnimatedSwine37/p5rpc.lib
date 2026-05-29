@@ -135,6 +135,14 @@ namespace p5rpc.lib.tester
                 Utils.Log($"The day of week is {_flowCaller.GET_DAYOFWEEK()}");
                 Utils.Log($"The month is {_flowCaller.GET_MONTH()}");
             }
+            // Testing flow context sharing
+            if (inputs.Contains(Key.F7))
+            {
+                int a = _flowCaller.FLD_SCRIPT_READ(0, 67, 0);
+                _flowCaller.FLD_SCRIPT_READ_SYNC(a);
+                _flowCaller.FLD_SCRIPT_EXEC(a, 0);
+                _flowCaller.FLD_SCRIPT_FREE(a);
+            }
         }
 
         #region Standard Overrides
