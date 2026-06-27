@@ -6,6 +6,6 @@ void Test()
 	MSG(TestMsg);
 	MSG_WND_CLS();
 
-	SET_ITEM_NUM(0x5000 + 105, GET_ITEM_NUM(0x5000 + 105)); // give 1 marble chessboard
+	SET_ITEM_NUM(0x5000 + 105, GET_ITEM_NUM(0x5000 + 105) + 1); // give 1 marble chessboard
 	GET_ITEM_WINDOW((0x5000 + 105), 1, 0);
 }
