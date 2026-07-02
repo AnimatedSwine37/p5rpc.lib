@@ -138,10 +138,12 @@ namespace p5rpc.lib.tester
             // Testing flow context sharing
             if (inputs.Contains(Key.F7))
             {
-                int a = _flowCaller.FLD_SCRIPT_READ(0, 67, 0);
-                _flowCaller.FLD_SCRIPT_READ_SYNC(a);
-                _flowCaller.FLD_SCRIPT_EXEC(a, 0);
-                _flowCaller.FLD_SCRIPT_FREE(a);
+                var sharedCaller = _flowCaller.NewSharedCaller();
+
+                int a = sharedCaller.FLD_SCRIPT_READ(0, 67, 0);
+                sharedCaller.FLD_SCRIPT_READ_SYNC(a);
+                sharedCaller.FLD_SCRIPT_EXEC(a, 0);
+                sharedCaller.FLD_SCRIPT_FREE(a);
             }
         }
 
