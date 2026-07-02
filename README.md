@@ -33,6 +33,8 @@ For more examples check out the [test mod](p5rpc.lib.tester/Mod.cs).
 #### Caveats
 FlowCaller won't necessarily work with every available function. For example any functions that are displaying messages or selections such as `MSG` won't work as there is no associated bf with the calls to the functions (I may make a workaround for this in the future though). 
 
+Some functions that are intended to be called in sequence such as `FLD_SCRIPT_READ` and `FLD_SCRIPT_EXEC` must share an underlying FlowContext object (not exposed in the API) to work. By default the FlowCaller uses a different context object for each flow call to prevent mods from interfering with each other but you can create a clone that uses the same context for all calls via `IFlowCaller sharedCaller = _flowCaller.NewSharedCaller();`
+
 There may be other functions that don't work as I've only tested the handful that I actually need (there are 2163 functions, no chance I'm testing them all :D). If you find one that doesn't work that you need to use (other than ones using messages) make an issue and I can look into it.
 
 ### Getting Sequence Information
