@@ -44,6 +44,9 @@ env:
 
 jobs:
   build:
+    permissions:
+      id-token: write  # enable GitHub OIDC token issuance for this job
+    
     runs-on: windows-latest
     defaults:
       run:
