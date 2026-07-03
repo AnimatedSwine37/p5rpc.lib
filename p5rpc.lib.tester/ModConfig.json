@@ -14,7 +14,7 @@
   "ReleaseMetadataFileName": "p5rpc.lib.tester.ReleaseMetadata.json",
   "PluginData": {},
   "IsUniversalMod": false,
-  "ModDependencies": [ "reloaded.sharedlib.hooks", "p5rpc.inputhook", "p5rpc.lib" ],
+  "ModDependencies": [ "reloaded.sharedlib.hooks", "p5rpc.inputhook", "p5rpc.lib", "p5rpc.modloader" ],
   "OptionalDependencies": [],
   "SupportedAppId": ["p5r.exe"],
   "ProjectUrl": ""

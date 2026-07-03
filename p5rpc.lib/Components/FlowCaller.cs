@@ -13,6 +13,7 @@ namespace p5rpc.lib.Components
     {
         private FlowContext** _flowContext;
         private FlowFunctionGroup* _flowFunctions;
+        private FlowContext? _sharedFlowContext = null;
 
         private IHook<MainLoopDelegate> _mainLoopHook;
         private Queue<FlowCallInfo> _callQueue = new();
@@ -46,7 +47,7 @@ namespace p5rpc.lib.Components
             {
                 if (!result.Found)
                 {
-                    Utils.LogError("Unable to main loop ptr, won't be able to call flow functions :(");
+                    Utils.LogError("Unable to find main loop ptr, won't be able to call flow functions :(");
                     return;
                 }
                 Utils.LogDebug($"Found main loop ptr at 0x{result.Offset + Utils.BaseAddress:X}");
@@ -89,6 +90,14 @@ namespace p5rpc.lib.Components
             return _flowFunctions != null;
         }
 
+        public IFlowCaller NewSharedCaller()
+        {
+            var sharedCaller = (FlowCaller)MemberwiseClone();
+            sharedCaller._sharedFlowContext = new FlowContext();
+
+            return sharedCaller;
+        }
+
         public float CallFloatFlowFunction(FlowFunction function, params object[] arguments)
         {
             return CallFloatFlowFunction((FlowFunctionGroupType)((int)function >> 0xc & 0xf), (int)function & 0xfff, arguments);
@@ -111,7 +120,6 @@ namespace p5rpc.lib.Components
             return context.FloatReturnValue;
         }
 
-
         private FlowContext InternalCallFlowFunction(FlowFunctionGroupType group, int functionId, params object[] arguments)
         {
             if (!Ready())
@@ -132,15 +140,15 @@ namespace p5rpc.lib.Components
                 return new FlowContext();
             }
 
-            FlowContext newContext = new FlowContext();
-            SetArgs(ref newContext, arguments);
+            FlowContext context = _sharedFlowContext ?? new FlowContext();
+            SetArgs(ref context, arguments);
 
             if (_mainThread == null || Thread.CurrentThread != _mainThread)
             {
                 // Calls not from the main thread are queued so they are run on it to avoid collisions with other flow functions
                 Utils.LogDebug($"Queuing call for flow function {name} with id {functionId} at 0x{function.Function:X} with {function.NumArguments} arguments");
 
-                FlowCallInfo callInfo = new FlowCallInfo(function, &newContext);
+                FlowCallInfo callInfo = new FlowCallInfo(function, &context);
                 _callQueue.Enqueue(callInfo);
 
                 while (!callInfo.CallFinished)
@@ -152,12 +160,13 @@ namespace p5rpc.lib.Components
                 Utils.LogDebug($"Calling flow function {name} with id {functionId} at 0x{function.Function:X} with {function.NumArguments} arguments");
                 
                 FlowContext* previousContext = *_flowContext;
-                *_flowContext = &newContext;
+                *_flowContext = &context;
                 ((delegate* unmanaged[Stdcall]<nuint, bool>)function.Function)(0);
                 *_flowContext = previousContext;
             }
 
-            return newContext;
+            if (_sharedFlowContext != null) _sharedFlowContext = context;
+            return context;
         }
 
         private void SetArgs(ref FlowContext context, params object[] arguments)

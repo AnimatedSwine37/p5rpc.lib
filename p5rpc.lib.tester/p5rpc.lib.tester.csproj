@@ -38,6 +38,15 @@
     <Content Include="ModConfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Update="FEmulator\BF\fscr0000_067_000.msg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="FEmulator\BF\fscr0000_067_000.flow">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="P5REssentials\CPK\test\SCRIPT\FIELD\fscr0000_067_000.bf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Preview.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -51,6 +60,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\p5rpc.lib.interfaces\p5rpc.lib.interfaces.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="P5REssentials\CPK\test\SCRIPT\FIELD\" />
   </ItemGroup>
 
 </Project>

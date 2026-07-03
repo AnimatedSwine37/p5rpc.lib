@@ -1,0 +1,11 @@
+import("fscr0000_067_000.msg");
+
+void Test()
+{
+	MSG_WND_DSP();
+	MSG(TestMsg);
+	MSG_WND_CLS();
+
+	SET_ITEM_NUM(0x5000 + 105, GET_ITEM_NUM(0x5000 + 105) + 1); // give 1 marble chessboard
+	GET_ITEM_WINDOW((0x5000 + 105), 1, 0);
+}
