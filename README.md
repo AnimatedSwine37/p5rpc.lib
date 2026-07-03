@@ -30,10 +30,23 @@ This assumes that you've saved your reference to IP5RLib in a `_p5rLib` variable
 
 For more examples check out the [test mod](p5rpc.lib.tester/Mod.cs).
 
+#### Functions With Shared Context
+
+Some functions that are intended to be called in sequence such as `FLD_SCRIPT_READ` and `FLD_SCRIPT_EXEC` must share a context to work. By default the FlowCaller uses a different context for each call to prevent mods from interfering with each other. So, to make these functions work you need to get a caller that uses a shared context via the `NewSharedCaller` method. For example:
+
+``` C#
+var sharedCaller = _flowCaller.NewSharedCaller();
+
+int a = sharedCaller.FLD_SCRIPT_READ(0, 67, 0);
+sharedCaller.FLD_SCRIPT_READ_SYNC(a);
+sharedCaller.FLD_SCRIPT_EXEC(a, 0);
+sharedCaller.FLD_SCRIPT_FREE(a);
+```
+
+This shared caller uses the same interface as the normal one so switching to it should be easy. 
+
 #### Caveats
 FlowCaller won't necessarily work with every available function. For example any functions that are displaying messages or selections such as `MSG` won't work as there is no associated bf with the calls to the functions (I may make a workaround for this in the future though). 
-
-Some functions that are intended to be called in sequence such as `FLD_SCRIPT_READ` and `FLD_SCRIPT_EXEC` must share an underlying FlowContext object (not exposed in the API) to work. By default the FlowCaller uses a different context object for each flow call to prevent mods from interfering with each other but you can create a clone that uses the same context for all calls via `IFlowCaller sharedCaller = _flowCaller.NewSharedCaller();`
 
 There may be other functions that don't work as I've only tested the handful that I actually need (there are 2163 functions, no chance I'm testing them all :D). If you find one that doesn't work that you need to use (other than ones using messages) make an issue and I can look into it.
 
