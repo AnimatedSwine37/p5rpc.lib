@@ -118,11 +118,17 @@ jobs:
         # Newline-delimited list of path globs for asset files to upload
         files: |
           ${{ env.PUBLISH_GITHUB_PATH }}/*
-        
+          
+      # Get a short-lived NuGet API key
+    - name: NuGet login (OIDC → temp API key)
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: ${{ secrets.NUGET_USER }}    
+    
     - name: Push to NuGet (on Tag)
       env: 
         NUGET_KEY: ${{ secrets.RELOADED_NUGET_KEY }}
-        INTERFACE_NUGET_KEY: ${{ secrets.INTERFACE_NUGET_KEY }}
       if: env.IS_RELEASE == 'true'
       run: |
         if ([string]::IsNullOrEmpty("$env:NUGET_KEY"))
@@ -142,5 +148,5 @@ jobs:
         Foreach ($item in $items)
         {
             Write-Host "Pushing $item"
-            dotnet nuget push "$item" -k "$env:INTERFACE_NUGET_KEY" -s "$env:NUGET_INTERFACE_URL" --skip-duplicate
+            dotnet nuget push "$item" -k "${{steps.login.outputs.NUGET_API_KEY}}" -s "$env:NUGET_INTERFACE_URL" --skip-duplicate
         }
